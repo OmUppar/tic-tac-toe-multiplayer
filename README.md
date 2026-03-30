@@ -1,70 +1,128 @@
-# Getting Started with Create React App
+# 🎮 Tic-Tac-Toe Multiplayer (Nakama + React)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A real-time multiplayer Tic-Tac-Toe game built using **React** (frontend) and **Nakama** (backend with server-authoritative matches).
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+- Real-time multiplayer gameplay
+- Server-authoritative game logic
+- Match creation and joining
+- Turn-based system (X / O)
+- Persistent connection using WebSockets
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🏗️ Architecture
 
-### `npm test`
+### Frontend
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- React.js
+- Nakama JS Client (`@heroiclabs/nakama-js`)
+- WebSocket-based real-time updates
 
-### `npm run build`
+### Backend
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Nakama game server
+- CockroachDB (database)
+- Docker-based setup
+- Server-authoritative match handler
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ⚙️ Setup & Installation
 
-### `npm run eject`
+### 1️⃣ Clone Repository
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+git clone https://github.com/YOUR_USERNAME/tic-tac-toe-multiplayer.git
+cd tic-tac-toe-multiplayer
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 2️⃣ Start Backend (Nakama + DB)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+cd backend
+docker-compose up --build
+```
 
-## Learn More
+✔ Services:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Nakama → http://localhost:7350
+- CockroachDB → http://localhost:8081
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+### 3️⃣ Start Frontend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+cd frontend
+npm install
+npm start
+```
 
-### Analyzing the Bundle Size
+App runs at:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+http://localhost:3000
+```
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🎯 How Multiplayer Works
 
-### Advanced Configuration
+1. User connects to Nakama using device authentication
+2. A match is created or joined
+3. Players click on grid → move sent to server
+4. Server validates move and updates board
+5. Updated state is broadcast to all players
+6. UI updates in real-time
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## 🔌 API / Server Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Nakama Client Config
 
-### `npm run build` fails to minify
+```js
+const client = new Client("defaultkey", "127.0.0.1", "7350");
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Match Handler
+
+- `matchInit` → Initialize game state
+- `matchJoin` → Add players
+- `matchLoop` → Process moves
+- `broadcastMessage` → Send updated state
+
+---
+
+## 🧪 How to Test Multiplayer
+
+### Method 1: Two Tabs
+
+- Open app in 2 browser tabs
+- Both join same match
+- Play turns alternately
+
+### Method 2: Two Devices
+
+- Open app on different systems
+- Ensure same Nakama server
+- Play real-time
+- Server-authoritative model prevents cheating
+- Stateless frontend (UI only reflects server)
+- WebSocket used for real-time sync
+- Docker ensures consistent backend setup
+
+---
+
+## 🛠️ Future Improvements
+
+- Add player matchmaking queue
+- Add game restart
+- Add score tracking
+- Add UI enhancements
